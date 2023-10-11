@@ -1,6 +1,7 @@
 #include <iostream> 
 #include <windows.h>
 #include <string>
+#include <cstdio> //printf()
 #include <conio.h> //getch()
 #include <cstdlib> //rand
 #include "utility.h"
@@ -66,7 +67,7 @@ void playStory() {
 	slowType(characterName + ": It's time " + bandName + " got off the ground.\n");
 
 	//CHOICE: INITIAL INVESTMENT
-	int _init_investment = (rand() % 1000 + 500);
+	int _init_investment = (rand() * 10);
 	slowType("(Your Aunt offers an investment of $" + to_string(_init_investment) + ". Do you accept? Y/N: ");
 	choice = getch();
 	switch (choice)
@@ -142,7 +143,10 @@ void playStory() {
 		displayStats(bandName, stats);
 		cout << endl;
 
-		if(purchased) break;
+		if(purchased) {
+			stats[0] -= _total;
+			break;
+		}
 	}
 	
 	//Resetting Screen
@@ -236,7 +240,10 @@ void playStory() {
 		displayStats(bandName, stats);
 		cout << endl;
 
-		if(published) break;
+		if(published) {
+			stats[0] -= _total;
+			break;
+		}
 	}
 	
 	//Resetting Screen
@@ -244,13 +251,21 @@ void playStory() {
 	displayStats(bandName, stats);
 
 	//End
-	slowType("Its been a month since you released your first song.");
-	slowType("Let's see how you did.");
-	stats[2] = 2000 * stats[3] * stats[3];
-	stats[3] = 500 * stats[3] * stats[3];
-	slowType("You garnered" + to_string(stats[2]) + "plays, and\n");
-	slowType("you gained" + to_string(stats[2]) + "fans");
+	slowType("Its been a month since you released your first song.\n");
+	slowType("Let's see how you did.\n");
+	stats[1] += trunc(2000 * stats[3]);
+	stats[2] += trunc(500 * stats[3]);
+	slowType("You garnered " + to_string(static_cast<int>(stats[1])) + " plays, and\n");
+	slowType("you gained " + to_string(static_cast<int>(stats[2])) + " fans");
+
+	//Resetting Screen
+	clearScreen(2000);
 	displayStats(bandName, stats);
+		slowType("You're well on your way to becoing a worldwide sensation!\n");
+		slowType("Unfortunately, continuing on from this point would require\nus to rebuild the game from scratch, so as to fit the scope.\n");
+		slowType("Nevertheless, we appreciate you playing so far.\n");
+
+	//displayStats(bandName, stats);
 }
 
 void displayStats(string bandName, float stats[]){
